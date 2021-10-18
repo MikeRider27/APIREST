@@ -1,8 +1,8 @@
 package Core;
 
 public enum TipoMotor {
-    POSTGRESQL ("postgresql", "org.postgresql.Driver","parking","postgres","123","5432","localhost"),
-    MYSQL ("mysql","com.mysql.jdbc.Driver","usuarios","root","root","3306","localhost");
+    POSTGRESQL ("postgresql", "org.postgresql.Driver","examen","postgres","123","5432","localhost"),
+    MYSQL ("mysql","com.mysql.jdbc.Driver","examen","root","root","3306","localhost");
    
 
     private final String motorBD;
