@@ -1,7 +1,7 @@
 package Core;
 
 public enum TipoMotor {
-    POSTGRESQL ("postgresql", "org.postgresql.Driver","proyecto","postgres","123","5432","localhost"),
+    POSTGRESQL ("postgresql", "org.postgresql.Driver","proyecto","postgres","dgtic123","5432","localhost"),
     MYSQL ("mysql","com.mysql.jdbc.Driver","examen","root","root","3306","localhost");
    
 
