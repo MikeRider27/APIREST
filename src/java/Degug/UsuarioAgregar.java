@@ -28,7 +28,7 @@ public class UsuarioAgregar {
         dto.setNombre("Miguel Cabañas");
        dto.setNick("MC");
        dto.setPassword("456");
-       dto.setRol(new RolDTO(2));
+       dto.setRol(new RolDTO(1));
     
        
         dao = new UsuarioDAOIMP();

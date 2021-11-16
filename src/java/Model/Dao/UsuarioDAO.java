@@ -13,5 +13,6 @@ import Model.Dto.UsuarioDTO;
  * @author dgtic-miguel
  */
 public interface UsuarioDAO extends BaseSQL<UsuarioDTO>{
+    boolean validarUsuario(UsuarioDTO dto);
     
 }

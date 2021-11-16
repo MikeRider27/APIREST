@@ -38,6 +38,34 @@ public class UsuarioRest {
     public String test(String test) {
         return " Bienvenidos a la Aplicación del REST " + test;
     }
+    
+     @POST
+    @Path("validar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String validarUsuario(InputStream json) {
+        respuestaDTO = new RespuestaREST();
+        Gson gson = new Gson();
+        UsuarioDTO usuarioDTO;
+
+        usuarioDTO = gson.fromJson(Util.getJson(json), UsuarioDTO.class);
+
+        if (usuarioDTO != null) {
+            System.out.println("usuario " + usuarioDTO.getNick());
+            System.out.println("clave " + usuarioDTO.getPassword());
+            
+        }
+
+        UsuarioDAOIMP usuarioDAO = new UsuarioDAOIMP();
+        if (usuarioDAO.validarUsuario(usuarioDTO) == true) {
+            respuestaDTO.setMensaje("Token generado en forma exitosa");
+            respuestaDTO.setToken(usuarioDAO.getToken());
+            return new Gson().toJson(respuestaDTO);
+        } else {
+            respuestaDTO.setMensaje("Error durante la Operación");
+            return new Gson().toJson(respuestaDTO);
+        }
+    }
 
     @GET
     @Path("registros")

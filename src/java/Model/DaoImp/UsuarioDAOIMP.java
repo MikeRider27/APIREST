@@ -6,6 +6,7 @@
 package Model.DaoImp;
 
 import Core.Conexion;
+import Core.Util;
 import Model.Dao.UsuarioDAO;
 import Model.Dto.RolDTO;
 import Model.Dto.UsuarioDTO;
@@ -28,9 +29,11 @@ public class UsuarioDAOIMP implements UsuarioDAO {
     private Conexion conexion;
     private PreparedStatement ps;
     private ResultSet rs;
+    private String token;
 
     public UsuarioDAOIMP() {
         conexion = new Conexion();
+        token = "";
     }
 
     @Override
@@ -96,8 +99,8 @@ public class UsuarioDAOIMP implements UsuarioDAO {
         try {
             UsuarioDTO dto = null;
             List<UsuarioDTO> lista;
-            sql = "SELECT u.id_usuario, u.nombre, u.nick, u.id_rol, r.descripcion as rol, u.estado\n" +
-"                    FROM public.usuarios as u INNER JOIN roles as r ON u.id_rol = r.id_rol";
+            sql = "SELECT u.id_usuario, u.nombre, u.nick, u.id_rol, r.descripcion as rol, u.estado\n"
+                    + "                    FROM public.usuarios as u INNER JOIN roles as r ON u.id_rol = r.id_rol";
             ps = conexion.obtenerConexion().prepareStatement(sql);
             rs = ps.executeQuery();
             lista = new ArrayList<>();
@@ -107,8 +110,8 @@ public class UsuarioDAOIMP implements UsuarioDAO {
                 dto.setNombre(rs.getString("nombre"));
                 dto.setNick(rs.getString("nick"));
                 dto.setRol(new RolDTO(rs.getInt("id_rol"), rs.getString("rol")));
-                 dto.setEstado(rs.getBoolean("estado"));
-               
+                dto.setEstado(rs.getBoolean("estado"));
+
                 lista.add(dto);
             }
             return lista;
@@ -124,6 +127,56 @@ public class UsuarioDAOIMP implements UsuarioDAO {
                 Logger.getLogger(ContratosDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    @Override
+    public boolean validarUsuario(UsuarioDTO dto) {
+        try {
+
+            sql = "SELECT id_usuario FROM public.usuarios "
+                    + "WHERE nick = ? AND password = ?  AND estado = TRUE";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+            ps.setString(1, dto.getNick());
+            ps.setString(2, dto.getPassword());
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                System.out.println("reconoce los datos del usuario ");
+                token = Util.generarToken();
+                int idUsuario = rs.getInt("id_usuario");
+                conexion.Transaccion(Conexion.TR.INICIAR);
+                sql = "UPDATE public.usuario_token SET token=?, creacion_token=now() WHERE id_usuario = ?; ";
+                ps = conexion.obtenerConexion().prepareStatement(sql);
+                ps.setString(1, token);
+                ps.setInt(2, idUsuario);
+                if (ps.executeUpdate() > 0) {
+                    conexion.Transaccion(Conexion.TR.CONFIRMAR);
+                    return true;
+                } else {
+                    conexion.Transaccion(Conexion.TR.CANCELAR);
+                    return false;
+                }
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(MenuSistemaDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error " + ex.getMessage());
+            return false;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioRESTDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+
+    public String getToken() {
+        if (!token.isEmpty()) {
+            return token;
+        }
+        return null;
     }
 
 }

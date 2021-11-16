@@ -17,6 +17,7 @@ public class UsuarioDTO {
     private String password;
     private Boolean estado;    
     private RolDTO rol;
+      private String  token;
     
      public UsuarioDTO() {
     }
@@ -74,6 +75,13 @@ public class UsuarioDTO {
         this.rol = rol;
     }
     
-    
+      public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
 
 }

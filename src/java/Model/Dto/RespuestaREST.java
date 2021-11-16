@@ -12,6 +12,7 @@ package Model.Dto;
 public class RespuestaREST {
     private Integer codigo;
     private String  mensaje;
+        private String  token;
 
     public Integer getCodigo() {
         return codigo;
@@ -27,6 +28,14 @@ public class RespuestaREST {
 
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
     
     
