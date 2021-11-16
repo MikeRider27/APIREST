@@ -9,29 +9,24 @@ package Model.Dto;
  *
  * @author mike
  */
-public class RolDTO {
+public class ColorDTO {
 
-    private Integer id_rol;
+    private Integer id_color;
     private String descripcion;
     
-    public RolDTO(Integer id_rol) {
-        this.id_rol = id_rol;
+    public ColorDTO(Integer id_color) {
+        this.id_color = id_color;
     }
     
-    public RolDTO() {
+    public ColorDTO() {
     }
 
-  public RolDTO(Integer id_rol, String descripcion) {
-        this.id_rol = id_rol;
-        this.descripcion = descripcion;
+    public Integer getId_color() {
+        return id_color;
     }
 
-    public Integer getId_rol() {
-        return id_rol;
-    }
-
-    public void setId_rol(Integer id_rol) {
-        this.id_rol = id_rol;
+    public void setId_color(Integer id_color) {
+        this.id_color = id_color;
     }
 
     public String getDescripcion() {
@@ -41,5 +36,7 @@ public class RolDTO {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    
 
 }

@@ -9,29 +9,24 @@ package Model.Dto;
  *
  * @author mike
  */
-public class RolDTO {
+public class CiudadDTO {
 
-    private Integer id_rol;
+    private Integer id_ciudad;
     private String descripcion;
     
-    public RolDTO(Integer id_rol) {
-        this.id_rol = id_rol;
+    public CiudadDTO(Integer id_ciudad) {
+        this.id_ciudad = id_ciudad;
     }
     
-    public RolDTO() {
+    public CiudadDTO() {
     }
 
-  public RolDTO(Integer id_rol, String descripcion) {
-        this.id_rol = id_rol;
-        this.descripcion = descripcion;
+    public Integer getId_ciudad() {
+        return id_ciudad;
     }
 
-    public Integer getId_rol() {
-        return id_rol;
-    }
-
-    public void setId_rol(Integer id_rol) {
-        this.id_rol = id_rol;
+    public void setId_ciudad(Integer id_ciudad) {
+        this.id_ciudad = id_ciudad;
     }
 
     public String getDescripcion() {
@@ -41,5 +36,7 @@ public class RolDTO {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    
 
 }

@@ -5,7 +5,11 @@
         <group>
             <file>file:/home/dgtic-miguel/NetBeansProjects/APIREST/src/java/Core/Util.java</file>
             <file>file:/home/dgtic-miguel/NetBeansProjects/APIREST/src/java/settingREST/RouteREST.java</file>
+            <file>file:/home/dgtic-miguel/NetBeansProjects/APIREST/src/java/ControllerREST/MarcaRest.java</file>
+            <file>file:/home/dgtic-miguel/NetBeansProjects/APIREST/src/java/Model/Dao/MarcaDAO.java</file>
             <file>file:/home/dgtic-miguel/NetBeansProjects/APIREST/src/java/Core/Conexion.java</file>
+            <file>file:/home/dgtic-miguel/NetBeansProjects/APIREST/src/java/Model/DaoImp/MarcaDAOIMP.java</file>
+            <file>file:/home/dgtic-miguel/NetBeansProjects/APIREST/src/java/Model/Dto/MarcaDTO.java</file>
         </group>
     </open-files>
 </project-private>
