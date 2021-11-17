@@ -15,16 +15,15 @@ public class UsuarioDTO {
     private String nombre;
     private String nick;
     private String password;
-    private Boolean estado;    
+    private Boolean estado;
     private RolDTO rol;
-      private String  token;
-    
-     public UsuarioDTO() {
+    private String token;
+
+    public UsuarioDTO() {
     }
 
-
     public UsuarioDTO(Integer id) {
-           this.id_usuario = id; //To change body of generated methods, choose Tools | Templates.
+        this.id_usuario = id; //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getId_usuario() {
@@ -74,14 +73,13 @@ public class UsuarioDTO {
     public void setRol(RolDTO rol) {
         this.rol = rol;
     }
-    
-      public String getToken() {
+
+    public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
     }
-
 
 }

@@ -7,10 +7,10 @@ package ControllerREST;
 
 import Core.Util;
 import Model.Dao.TokenDAO;
-import Model.DaoImp.ColorDAOIMP;
+import Model.DaoImp.TipoVehiculoDAOIMP;
 import Model.DaoImp.TokenDAOIMP;
 import Model.Dto.RespuestaREST;
-import Model.Dto.ColorDTO;
+import Model.Dto.TipoVehiculoDTO;
 import com.google.gson.Gson;
 import java.io.InputStream;
 import javax.ws.rs.Consumes;
@@ -27,11 +27,11 @@ import javax.ws.rs.core.MediaType;
  *
  * @author mike
  */
-@Path("Color")
-public class ColorRest {
+@Path("TipoVehiculo")
+public class TipoVehiculoRest {
 
-    private ColorDTO dto;
-    private ColorDAOIMP dao;
+    private TipoVehiculoDTO dto;
+    private TipoVehiculoDAOIMP dao;
     private RespuestaREST respuestaDTO;
     private TokenDAO tokenDAO;
 
@@ -49,7 +49,7 @@ public class ColorRest {
         respuestaDTO = new RespuestaREST();
         tokenDAO = new TokenDAOIMP();
         if (tokenDAO.verificarToken(token) == true) {
-            dao = new ColorDAOIMP();
+            dao = new TipoVehiculoDAOIMP();
             return new Gson().toJson(dao.recuperarRegistros());
         } else {
             respuestaDTO.setMensaje("Token no valido");
@@ -64,8 +64,8 @@ public class ColorRest {
         respuestaDTO = new RespuestaREST();
         tokenDAO = new TokenDAOIMP();
         if (tokenDAO.verificarToken(token) == true) {
-            dao = new ColorDAOIMP();
-            ColorDTO dto = dao.recuperarRegistro(id);
+            dao = new TipoVehiculoDAOIMP();
+            TipoVehiculoDTO dto = dao.recuperarRegistro(id);
             if (dto != null) {
                 return new Gson().toJson(dto);
             } else {
@@ -85,9 +85,9 @@ public class ColorRest {
         respuestaDTO = new RespuestaREST();
         tokenDAO = new TokenDAOIMP();
         Gson gson = new Gson();
-        dto = gson.fromJson(Util.getJson(json), ColorDTO.class);
+        dto = gson.fromJson(Util.getJson(json), TipoVehiculoDTO.class);
         if (tokenDAO.verificarToken(token) == true) {
-            dao = new ColorDAOIMP();
+            dao = new TipoVehiculoDAOIMP();
             if (dao.agregarRegistro(dto) == true) {
                 respuestaDTO.setMensaje("Operación Exitosa");
                 return new Gson().toJson(respuestaDTO);
@@ -107,9 +107,9 @@ public class ColorRest {
         respuestaDTO = new RespuestaREST();
         tokenDAO = new TokenDAOIMP();
         Gson gson = new Gson();
-        dto = gson.fromJson(Util.getJson(json), ColorDTO.class);
+        dto = gson.fromJson(Util.getJson(json), TipoVehiculoDTO.class);
         if (tokenDAO.verificarToken(token) == true) {
-            dao = new ColorDAOIMP();
+            dao = new TipoVehiculoDAOIMP();
             if (dao.modificarRegistro(dto) == true) {
                 respuestaDTO.setMensaje("Operación Exitosa");
                 return new Gson().toJson(respuestaDTO);
@@ -129,8 +129,8 @@ public class ColorRest {
         respuestaDTO = new RespuestaREST();
         tokenDAO = new TokenDAOIMP();
         if (tokenDAO.verificarToken(token) == true) {
-            dao = new ColorDAOIMP();
-            Boolean resp = dao.eliminarRegistro(new ColorDTO(id));
+            dao = new TipoVehiculoDAOIMP();
+            Boolean resp = dao.eliminarRegistro(new TipoVehiculoDTO(id));
             if (resp == false) {
                 respuestaDTO.setMensaje("Error durante la eliminación del registro");
                 return new Gson().toJson(respuestaDTO);

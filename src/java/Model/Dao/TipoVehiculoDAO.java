@@ -6,12 +6,12 @@
 package Model.Dao;
 
 import Core.BaseSQL;
-import Model.Dto.TiposContratoDTO;
+import Model.Dto.TipoVehiculoDTO;
 
 /**
  *
  * @author mike
  */
-public interface TiposContratoDAO extends BaseSQL<TiposContratoDTO> {
+public interface TipoVehiculoDAO extends BaseSQL<TipoVehiculoDTO> {
     
 }

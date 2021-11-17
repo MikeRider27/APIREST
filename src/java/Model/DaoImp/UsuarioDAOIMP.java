@@ -116,7 +116,7 @@ public class UsuarioDAOIMP implements UsuarioDAO {
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(ContratosDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } finally {
             try {
@@ -124,7 +124,7 @@ public class UsuarioDAOIMP implements UsuarioDAO {
                 ps.close();
                 rs.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ContratosDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -166,7 +166,7 @@ public class UsuarioDAOIMP implements UsuarioDAO {
                 ps.close();
                 rs.close();
             } catch (SQLException ex) {
-                Logger.getLogger(UsuarioRESTDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;

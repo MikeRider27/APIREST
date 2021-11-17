@@ -9,30 +9,26 @@ package Model.Dto;
  *
  * @author mike
  */
-public class RolDTO {
+public class ModeloDTO {
 
-    private Integer id_rol;
+    private Integer id_modelo;
     private String descripcion;
+    private MarcaDTO marca;    
     private String token;
 
-    public RolDTO(Integer id_rol) {
-        this.id_rol = id_rol;
+    public ModeloDTO(Integer id_modelo) {
+        this.id_modelo = id_modelo;
     }
 
-    public RolDTO() {
+    public ModeloDTO() {
     }
 
-    public RolDTO(Integer id_rol, String descripcion) {
-        this.id_rol = id_rol;
-        this.descripcion = descripcion;
+    public Integer getId_modelo() {
+        return id_modelo;
     }
 
-    public Integer getId_rol() {
-        return id_rol;
-    }
-
-    public void setId_rol(Integer id_rol) {
-        this.id_rol = id_rol;
+    public void setId_modelo(Integer id_modelo) {
+        this.id_modelo = id_modelo;
     }
 
     public String getDescripcion() {
@@ -43,6 +39,14 @@ public class RolDTO {
         this.descripcion = descripcion;
     }
 
+    public MarcaDTO getMarca() {
+        return marca;
+    }
+
+    public void setMarca(MarcaDTO marca) {
+        this.marca = marca;
+    }
+
     public String getToken() {
         return token;
     }
@@ -50,6 +54,7 @@ public class RolDTO {
     public void setToken(String token) {
         this.token = token;
     }
+
     
-    
+
 }

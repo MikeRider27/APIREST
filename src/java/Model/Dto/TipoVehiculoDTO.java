@@ -9,30 +9,30 @@ package Model.Dto;
  *
  * @author mike
  */
-public class RolDTO {
+public class TipoVehiculoDTO {
 
-    private Integer id_rol;
+    private Integer id_tipo;
     private String descripcion;
     private String token;
 
-    public RolDTO(Integer id_rol) {
-        this.id_rol = id_rol;
+    public TipoVehiculoDTO(Integer id_tipo) {
+        this.id_tipo = id_tipo;
     }
 
-    public RolDTO() {
+    public TipoVehiculoDTO() {
     }
 
-    public RolDTO(Integer id_rol, String descripcion) {
-        this.id_rol = id_rol;
+    public TipoVehiculoDTO(Integer id_tipo, String descripcion) {
+        this.id_tipo = id_tipo;
         this.descripcion = descripcion;
     }
 
-    public Integer getId_rol() {
-        return id_rol;
+    public Integer getId_tipo() {
+        return id_tipo;
     }
 
-    public void setId_rol(Integer id_rol) {
-        this.id_rol = id_rol;
+    public void setId_tipo(Integer id_tipo) {
+        this.id_tipo = id_tipo;
     }
 
     public String getDescripcion() {

@@ -6,7 +6,9 @@
 package ControllerREST;
 
 import Core.Util;
+import Model.Dao.TokenDAO;
 import Model.DaoImp.RolDAOIMP;
+import Model.DaoImp.TokenDAOIMP;
 import Model.Dto.RespuestaREST;
 import Model.Dto.RolDTO;
 import com.google.gson.Gson;
@@ -31,6 +33,7 @@ public class RolesRest {
     private RolDTO dto;
     private RolDAOIMP dao;
     private RespuestaREST respuestaDTO;
+    private TokenDAO tokenDAO;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -41,56 +44,79 @@ public class RolesRest {
     @GET
     @Path("registros")
     @Produces(MediaType.APPLICATION_JSON)
-    public String recuperarRegistros() {
-        dao = new RolDAOIMP();
-        return new Gson().toJson(dao.recuperarRegistros());
+    public String recuperarRegistros(@QueryParam("token") String token) {
+        System.out.println(token);
+        respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new RolDAOIMP();
+            return new Gson().toJson(dao.recuperarRegistros());
+        } else {
+            respuestaDTO.setMensaje("Token no valido");
+            return new Gson().toJson(respuestaDTO);
+        }
     }
 
     @GET
     @Path("registro")
     @Produces(MediaType.APPLICATION_JSON)
-    public String recuperarRegistro(@QueryParam("id") Integer id) {
-        dao = new RolDAOIMP();
-        RolDTO dto = dao.recuperarRegistro(id);
-        if (dto != null) {
-            return new Gson().toJson(dto);
+    public String recuperarRegistro(@QueryParam("id") Integer id, @QueryParam("token") String token) {
+        respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new RolDAOIMP();
+            RolDTO dto = dao.recuperarRegistro(id);
+            if (dto != null) {
+                return new Gson().toJson(dto);
+            } else {
+                respuestaDTO.setMensaje("Valor enviado no localizado");
+                return new Gson().toJson(respuestaDTO);
+            }
         } else {
-            dto = new RolDTO();
-            dto.setDescripcion("Valor enviado no localizado");
-            return new Gson().toJson(dto);
+            respuestaDTO.setMensaje("Token no valido");
+            return new Gson().toJson(respuestaDTO);
         }
+
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String insertar(InputStream json) {
+    public String insertar(InputStream json, @QueryParam("token") String token) {
         respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
         Gson gson = new Gson();
         dto = gson.fromJson(Util.getJson(json), RolDTO.class);
-        System.out.println("id_rol=" + dto.getId_rol());
-        System.out.println("descripion=" + dto.getDescripcion());
-
-        dao = new RolDAOIMP();
-        if (dao.agregarRegistro(dto) == true) {
-            respuestaDTO.setMensaje("Operación Exitosa");
-            return new Gson().toJson(respuestaDTO);
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new RolDAOIMP();
+            if (dao.agregarRegistro(dto) == true) {
+                respuestaDTO.setMensaje("Operación Exitosa");
+                return new Gson().toJson(respuestaDTO);
+            } else {
+                respuestaDTO.setMensaje("Error durante la Operación");
+                return new Gson().toJson(respuestaDTO);
+            }
         } else {
             respuestaDTO.setMensaje("Error durante la Operación");
             return new Gson().toJson(respuestaDTO);
         }
-
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public String modificacion(InputStream json) {
+    public String modificacion(InputStream json, @QueryParam("token") String token) {
         respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
         Gson gson = new Gson();
         dto = gson.fromJson(Util.getJson(json), RolDTO.class);
-        dao = new RolDAOIMP();
-        if (dao.modificarRegistro(dto) == true) {
-            respuestaDTO.setMensaje("Operación Exitosa");
-            return new Gson().toJson(respuestaDTO);
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new RolDAOIMP();
+            if (dao.modificarRegistro(dto) == true) {
+                respuestaDTO.setMensaje("Operación Exitosa");
+                return new Gson().toJson(respuestaDTO);
+            } else {
+                respuestaDTO.setMensaje("Error durante la Operación");
+                return new Gson().toJson(respuestaDTO);
+            }
         } else {
             respuestaDTO.setMensaje("Error durante la Operación");
             return new Gson().toJson(respuestaDTO);
@@ -99,15 +125,21 @@ public class RolesRest {
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public String eliminar(@QueryParam("id") Integer id) {
+    public String eliminar(@QueryParam("id") Integer id, @QueryParam("token") String token) {
         respuestaDTO = new RespuestaREST();
-        dao = new RolDAOIMP();
-        Boolean resp = dao.eliminarRegistro(new RolDTO(id));
-        if (resp == false) {
-            respuestaDTO.setMensaje("Error durante la eliminación del registro");
-            return new Gson().toJson(respuestaDTO);
+        tokenDAO = new TokenDAOIMP();
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new RolDAOIMP();
+            Boolean resp = dao.eliminarRegistro(new RolDTO(id));
+            if (resp == false) {
+                respuestaDTO.setMensaje("Error durante la eliminación del registro");
+                return new Gson().toJson(respuestaDTO);
+            } else {
+                respuestaDTO.setMensaje("Registro eliminado en forma exitosa");
+                return new Gson().toJson(respuestaDTO);
+            }
         } else {
-            respuestaDTO.setMensaje("Registro eliminado en forma exitosa");
+            respuestaDTO.setMensaje("Error durante la Operación");
             return new Gson().toJson(respuestaDTO);
         }
     }

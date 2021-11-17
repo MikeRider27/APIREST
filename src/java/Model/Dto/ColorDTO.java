@@ -13,11 +13,12 @@ public class ColorDTO {
 
     private Integer id_color;
     private String descripcion;
-    
+    private String token;
+
     public ColorDTO(Integer id_color) {
         this.id_color = id_color;
     }
-    
+
     public ColorDTO() {
     }
 
@@ -37,6 +38,12 @@ public class ColorDTO {
         this.descripcion = descripcion;
     }
 
-    
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
 }

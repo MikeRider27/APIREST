@@ -13,6 +13,7 @@ public class CiudadDTO {
 
     private Integer id_ciudad;
     private String descripcion;
+     private String token;
     
     public CiudadDTO(Integer id_ciudad) {
         this.id_ciudad = id_ciudad;
@@ -35,6 +36,14 @@ public class CiudadDTO {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     

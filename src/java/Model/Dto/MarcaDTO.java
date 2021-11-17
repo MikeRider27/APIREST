@@ -13,11 +13,12 @@ public class MarcaDTO {
 
     private Integer id_marca;
     private String descripcion;
-    
+    private String token;
+
     public MarcaDTO(Integer id_marca) {
         this.id_marca = id_marca;
     }
-    
+
     public MarcaDTO() {
     }
 
@@ -35,6 +36,14 @@ public class MarcaDTO {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }
