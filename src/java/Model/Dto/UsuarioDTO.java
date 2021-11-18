@@ -22,8 +22,8 @@ public class UsuarioDTO {
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(Integer id) {
-        this.id_usuario = id; //To change body of generated methods, choose Tools | Templates.
+    public UsuarioDTO(Integer id_usuario) {
+        this.id_usuario = id_usuario; //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getId_usuario() {
@@ -80,6 +80,10 @@ public class UsuarioDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Object setRol() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

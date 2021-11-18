@@ -15,11 +15,11 @@ public class RolDTO {
     private String descripcion;
     private String token;
 
-    public RolDTO(Integer id_rol) {
-        this.id_rol = id_rol;
+    public RolDTO() {
     }
 
-    public RolDTO() {
+    public RolDTO(Integer id_rol) {
+        this.id_rol = id_rol;
     }
 
     public RolDTO(Integer id_rol, String descripcion) {
@@ -50,6 +50,5 @@ public class RolDTO {
     public void setToken(String token) {
         this.token = token;
     }
-    
-    
+
 }

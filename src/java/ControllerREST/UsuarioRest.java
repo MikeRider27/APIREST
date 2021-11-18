@@ -38,8 +38,8 @@ public class UsuarioRest {
     public String test(String test) {
         return " Bienvenidos a la Aplicación del REST " + test;
     }
-    
-     @POST
+
+    @POST
     @Path("validar")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -53,7 +53,7 @@ public class UsuarioRest {
         if (usuarioDTO != null) {
             System.out.println("usuario " + usuarioDTO.getNick());
             System.out.println("clave " + usuarioDTO.getPassword());
-            
+
         }
 
         UsuarioDAOIMP usuarioDAO = new UsuarioDAOIMP();
@@ -93,16 +93,11 @@ public class UsuarioRest {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public String insertar(InputStream json) {
-    
-          System.out.println(UsuarioDTO.class);
 
+        System.out.println(Util.getJson(json));
         respuestaDTO = new RespuestaREST();
         Gson gson = new Gson();
-     
-      dto = gson.fromJson(Util.getJson(json), UsuarioDTO.class);
-     System.out.println(gson.fromJson(Util.getJson(json), UsuarioDTO.class));
-   
-  
+        dto = gson.fromJson(Util.getJson(json), UsuarioDTO.class);
 
         dao = new UsuarioDAOIMP();
         if (dao.agregarRegistro(dto) == true) {
@@ -115,5 +110,4 @@ public class UsuarioRest {
 
     }
 
-  
 }

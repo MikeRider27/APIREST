@@ -40,6 +40,7 @@ public class UsuarioDAOIMP implements UsuarioDAO {
     public boolean agregarRegistro(UsuarioDTO dto) {
         try {
             System.out.println("llego");
+            
             conexion.Transaccion(Conexion.TR.INICIAR);
             sql = "INSERT INTO public.usuarios(nombre, nick, password, id_rol, estado) VALUES (?, ?, ?, ?, ?);";
             ps = conexion.obtenerConexion().prepareStatement(sql);
@@ -48,6 +49,8 @@ public class UsuarioDAOIMP implements UsuarioDAO {
             ps.setString(3, dto.getPassword());
             ps.setInt(4, dto.getRol().getId_rol());
             ps.setBoolean(5, true);
+            System.out.println("lssslego");
+         
 
             if (ps.executeUpdate() > 0) {
                 conexion.Transaccion(Conexion.TR.CONFIRMAR);

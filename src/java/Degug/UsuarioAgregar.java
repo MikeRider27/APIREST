@@ -25,9 +25,9 @@ public class UsuarioAgregar {
         dto = new UsuarioDTO();
         
 
-        dto.setNombre("Miguel Cabañas");
-       dto.setNick("MC");
-       dto.setPassword("456");
+        dto.setNombre("Angel Cabañas");
+       dto.setNick("MVC");
+       dto.setPassword("123456");
        dto.setRol(new RolDTO(1));
     
        
