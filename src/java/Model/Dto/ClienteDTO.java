@@ -17,8 +17,16 @@ public class ClienteDTO {
     private String apellidos;
     private String telefono;
     private String email;
+    private Integer id_ciudad;
     private CiudadDTO ciudad;
     private String token;
+
+    
+    public ClienteDTO() {
+    }
+    public ClienteDTO(Integer id_cliente) {
+        this.id_cliente = id_cliente;
+    }
 
     public Integer getId_cliente() {
         return id_cliente;
@@ -68,6 +76,14 @@ public class ClienteDTO {
         this.email = email;
     }
 
+    public Integer getId_ciudad() {
+        return id_ciudad;
+    }
+
+    public void setId_ciudad(Integer id_ciudad) {
+        this.id_ciudad = id_ciudad;
+    }
+
     public CiudadDTO getCiudad() {
         return ciudad;
     }
@@ -83,6 +99,11 @@ public class ClienteDTO {
     public void setToken(String token) {
         this.token = token;
     }
+
+   
+    
+    
+  
 
     
     
