@@ -21,6 +21,10 @@ public class MarcaDTO {
 
     public MarcaDTO() {
     }
+     public MarcaDTO(Integer id_marca, String descripcion) {
+        this.id_marca = id_marca;
+        this.descripcion = descripcion;
+    }
 
     public Integer getId_marca() {
         return id_marca;

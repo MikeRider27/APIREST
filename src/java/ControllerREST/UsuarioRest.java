@@ -110,4 +110,54 @@ public class UsuarioRest {
 
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String modificacion(InputStream json) {
+        respuestaDTO = new RespuestaREST();    
+        Gson gson = new Gson();
+        dto = gson.fromJson(Util.getJson(json), UsuarioDTO.class);    
+            dao = new UsuarioDAOIMP();
+            if (dao.modificarRegistro(dto) == true) {
+                respuestaDTO.setMensaje("Operación Exitosa");
+                return new Gson().toJson(respuestaDTO);
+            } else {
+                respuestaDTO.setMensaje("Error durante la Operación");
+                return new Gson().toJson(respuestaDTO);
+            }       
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public String eliminar(@QueryParam("id") Integer id) {
+        respuestaDTO = new RespuestaREST();
+        dao = new UsuarioDAOIMP();
+        Boolean resp = dao.eliminarRegistro(new UsuarioDTO(id));
+        if (resp == false) {
+            respuestaDTO.setMensaje("Error durante la eliminación del registro");
+            return new Gson().toJson(respuestaDTO);
+        } else {
+            respuestaDTO.setMensaje("Registro eliminado en forma exitosa");
+            return new Gson().toJson(respuestaDTO);
+        }
+
+    }
+    
+    
+    @PUT
+    @Path("desactivar")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String desactivar(@QueryParam("id") Integer id) {
+        respuestaDTO = new RespuestaREST();
+        dao = new UsuarioDAOIMP();
+        Boolean resp = dao.inactivarUsuario(new UsuarioDTO(id));
+        if (resp == false) {
+            respuestaDTO.setMensaje("Error durante la desactivacion");
+            return new Gson().toJson(respuestaDTO);
+        } else {
+            respuestaDTO.setMensaje("Registro desactivado en forma exitosa");
+            return new Gson().toJson(respuestaDTO);
+        }
+
+    }
+
 }

@@ -34,7 +34,7 @@ public class ClienteDAOIMP implements ClienteDAO {
 
     @Override
     public boolean agregarRegistro(ClienteDTO dto) {
-         try {
+        try {
             conexion.Transaccion(Conexion.TR.INICIAR);
             sql = "INSERT INTO public.cliente(cedula, nombres, apellidos, telefono, email, id_ciudad) "
                     + "VALUES (?, ?, ?, ?, ?, ?);";
@@ -68,17 +68,98 @@ public class ClienteDAOIMP implements ClienteDAO {
 
     @Override
     public boolean modificarRegistro(ClienteDTO dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conexion.Transaccion(Conexion.TR.INICIAR);
+            sql = "UPDATE public.cliente SET  cedula=?, nombres=?, apellidos=?, telefono=?, email=?, id_ciudad=? WHERE id_cliente=?;";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+            ps.setString(1, dto.getCedula());
+            ps.setString(2, dto.getNombres());
+            ps.setString(3, dto.getApellidos());
+            ps.setString(4, dto.getTelefono());
+            ps.setString(5, dto.getEmail());
+            ps.setInt(6, dto.getId_ciudad());
+            ps.setInt(7, dto.getId_cliente());
+            if (ps.executeUpdate() > 0) {
+                conexion.Transaccion(Conexion.TR.CONFIRMAR);
+                return true;
+            } else {
+                conexion.Transaccion(Conexion.TR.CANCELAR);
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            conexion.Transaccion(Conexion.TR.CANCELAR);
+            return false;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public boolean eliminarRegistro(ClienteDTO dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conexion.Transaccion(Conexion.TR.INICIAR);
+            sql = "DELETE FROM  public.cliente  WHERE id_cliente=?;";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+            ps.setInt(1, dto.getId_cliente());
+            if (ps.executeUpdate() > 0) {
+                conexion.Transaccion(Conexion.TR.CONFIRMAR);
+                return true;
+            } else {
+                conexion.Transaccion(Conexion.TR.CANCELAR);
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            conexion.Transaccion(Conexion.TR.CANCELAR);
+            return false;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public ClienteDTO recuperarRegistro(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            ClienteDTO dto = null;
+            sql = "SELECT c.id_cliente, c.cedula, c.nombres, c.apellidos, c.telefono, c.email, c.id_ciudad, d.descripcion as ciudad\n"
+                    + "	FROM public.cliente as c inner join ciudad as d ON c.id_ciudad = d.id_ciudad WHERE c.id_cliente = ? ";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                dto = new ClienteDTO();
+                dto.setId_cliente(rs.getInt("id_cliente"));
+                dto.setCedula(rs.getString("cedula"));
+                dto.setNombres(rs.getString("nombres"));
+                dto.setApellidos(rs.getString("apellidos"));
+                dto.setTelefono(rs.getString("telefono"));
+                dto.setEmail(rs.getString("email"));
+                dto.setCiudad(new CiudadDTO(rs.getInt("id_ciudad"), rs.getString("ciudad")));
+            }
+            return dto;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -86,8 +167,8 @@ public class ClienteDAOIMP implements ClienteDAO {
         try {
             ClienteDTO dto = null;
             List<ClienteDTO> lista;
-            sql = "SELECT p.id_cliente, p.cedula, p.nombres, p.apellidos, p.telefono, p.email, p.id_ciudad , c.descripcion as ciudad "
-                    + "FROM public.cliente as c inner join ciudad as c ON p.id_ciudad = c.id_ciudad";
+            sql = "SELECT c.id_cliente, c.cedula, c.nombres, c.apellidos, c.telefono, c.email, c.id_ciudad, d.descripcion as ciudad\n"
+                    + "	FROM public.cliente as c inner join ciudad as d ON c.id_ciudad = d.id_ciudad";
             ps = conexion.obtenerConexion().prepareStatement(sql);
             rs = ps.executeQuery();
             lista = new ArrayList<>();
@@ -99,12 +180,12 @@ public class ClienteDAOIMP implements ClienteDAO {
                 dto.setApellidos(rs.getString("apellidos"));
                 dto.setTelefono(rs.getString("telefono"));
                 dto.setEmail(rs.getString("email"));
-                dto.setCiudad(new CiudadDTO(rs.getInt("id_ciudad"), rs.getString("ciudad")));
+               dto.setCiudad(new CiudadDTO(rs.getInt("id_ciudad"), rs.getString("ciudad")));
                 lista.add(dto);
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ColorDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } finally {
             try {
@@ -112,7 +193,7 @@ public class ClienteDAOIMP implements ClienteDAO {
                 ps.close();
                 rs.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ClienteDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ColorDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

@@ -12,8 +12,8 @@ package Model.Dto;
 public class VehiculoDTO {
 
     private Integer id_vehiculo;
-    private String nombre; 
-    private String nick;
+      private Integer id_cliente;
+    private String chapa;
     private String password;
     private Boolean estado;
     private RolDTO rol;

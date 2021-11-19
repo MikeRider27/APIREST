@@ -14,5 +14,6 @@ import Model.Dto.UsuarioDTO;
  */
 public interface UsuarioDAO extends BaseSQL<UsuarioDTO>{
     boolean validarUsuario(UsuarioDTO dto);
+    boolean inactivarUsuario(UsuarioDTO dto);
     
 }

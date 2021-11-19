@@ -16,6 +16,7 @@ public class UsuarioDTO {
     private String nick;
     private String password;
     private Boolean estado;
+    private Integer id_rol;
     private RolDTO rol;
     private String token;
 
@@ -26,6 +27,9 @@ public class UsuarioDTO {
         this.id_usuario = id_usuario; //To change body of generated methods, choose Tools | Templates.
     }
 
+   
+
+   
     public Integer getId_usuario() {
         return id_usuario;
     }
@@ -82,8 +86,14 @@ public class UsuarioDTO {
         this.token = token;
     }
 
-    public Object setRol() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer getId_rol() {
+        return id_rol;
     }
+
+    public void setId_rol(Integer id_rol) {
+        this.id_rol = id_rol;
+    }
+
+    
 
 }

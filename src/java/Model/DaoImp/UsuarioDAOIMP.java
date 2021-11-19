@@ -40,17 +40,15 @@ public class UsuarioDAOIMP implements UsuarioDAO {
     public boolean agregarRegistro(UsuarioDTO dto) {
         try {
             System.out.println("llego");
-            
+
             conexion.Transaccion(Conexion.TR.INICIAR);
             sql = "INSERT INTO public.usuarios(nombre, nick, password, id_rol, estado) VALUES (?, ?, ?, ?, ?);";
             ps = conexion.obtenerConexion().prepareStatement(sql);
             ps.setString(1, dto.getNombre());
             ps.setString(2, dto.getNick());
             ps.setString(3, dto.getPassword());
-            ps.setInt(4, dto.getRol().getId_rol());
+            ps.setInt(4, dto.getId_rol());
             ps.setBoolean(5, true);
-            System.out.println("lssslego");
-         
 
             if (ps.executeUpdate() > 0) {
                 conexion.Transaccion(Conexion.TR.CONFIRMAR);
@@ -84,17 +82,96 @@ public class UsuarioDAOIMP implements UsuarioDAO {
 
     @Override
     public boolean modificarRegistro(UsuarioDTO dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conexion.Transaccion(Conexion.TR.INICIAR);
+            sql = "UPDATE public.usuarios SET nombre=?, nick=?, password=?, id_rol=? WHERE id_usuario=?;";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+         ps.setString(1, dto.getNombre());
+            ps.setString(2, dto.getNick());
+            ps.setString(3, dto.getPassword());
+            ps.setInt(4, dto.getId_rol());
+             ps.setInt(5, dto.getId_usuario());
+            if (ps.executeUpdate() > 0) {
+                conexion.Transaccion(Conexion.TR.CONFIRMAR);
+                return true;
+            } else {
+                conexion.Transaccion(Conexion.TR.CANCELAR);
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RolDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            conexion.Transaccion(Conexion.TR.CANCELAR);
+            return false;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(RolDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public boolean eliminarRegistro(UsuarioDTO dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conexion.Transaccion(Conexion.TR.INICIAR);
+            sql = "DELETE FROM  public.usuarios  WHERE id_usuario=?;";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+            ps.setInt(1, dto.getId_usuario());
+            if (ps.executeUpdate() > 0) {
+                conexion.Transaccion(Conexion.TR.CONFIRMAR);
+                return true;
+            } else {
+                conexion.Transaccion(Conexion.TR.CANCELAR);
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            conexion.Transaccion(Conexion.TR.CANCELAR);
+            return false;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public UsuarioDTO recuperarRegistro(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            UsuarioDTO dto = null;
+            sql = "SELECT u.id_usuario, u.nombre, u.nick, u.id_rol, r.descripcion as rol, u.estado\n"
+                    + " FROM public.usuarios as u INNER JOIN roles as r ON u.id_rol = r.id_rol"
+                    + " WHERE id_usuario = ? ";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                dto = new UsuarioDTO();
+                dto.setId_usuario(rs.getInt("id_usuario"));
+                dto.setNombre(rs.getString("nombre"));
+                dto.setNick(rs.getString("nick"));
+                dto.setRol(new RolDTO(rs.getInt("id_rol"), rs.getString("rol")));
+                dto.setEstado(rs.getBoolean("estado"));
+
+            }
+            return dto;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -180,6 +257,35 @@ public class UsuarioDAOIMP implements UsuarioDAO {
             return token;
         }
         return null;
+    }
+
+    @Override
+    public boolean inactivarUsuario(UsuarioDTO dto){
+    try {
+            conexion.Transaccion(Conexion.TR.INICIAR);
+            sql = "UPDATE public.usuarios SET  estado = ? WHERE id_usuario=? ;";
+            ps = conexion.obtenerConexion().prepareStatement(sql);
+            ps.setBoolean(1, false);
+            ps.setInt(2, dto.getId_usuario());
+            if (ps.executeUpdate() > 0) {
+                conexion.Transaccion(Conexion.TR.CONFIRMAR);
+                return true;
+            } else {
+                conexion.Transaccion(Conexion.TR.CANCELAR);
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            conexion.Transaccion(Conexion.TR.CANCELAR);
+            return false;
+        } finally {
+            try {
+                conexion.cerrarConexion();
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAOIMP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }  
     }
 
 }

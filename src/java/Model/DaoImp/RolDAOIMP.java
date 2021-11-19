@@ -89,7 +89,7 @@ private String sql;
 
     @Override
     public boolean eliminarRegistro(RolDTO dto) {
-    try {
+        try {
             conexion.Transaccion(Conexion.TR.INICIAR);
             sql = "DELETE FROM  public.roles  WHERE id_rol=?;";
             ps = conexion.obtenerConexion().prepareStatement(sql);
