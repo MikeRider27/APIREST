@@ -6,10 +6,11 @@
 package ControllerREST;
 
 import Core.Util;
+import Model.Dao.TokenDAO;
 import Model.DaoImp.UsuarioDAOIMP;
+import Model.DaoImp.TokenDAOIMP;
 import Model.Dto.RespuestaREST;
 import Model.Dto.UsuarioDTO;
-import Model.Dto.RolDTO;
 import com.google.gson.Gson;
 import java.io.InputStream;
 import javax.ws.rs.Consumes;
@@ -32,11 +33,72 @@ public class UsuarioRest {
     private UsuarioDTO dto;
     private UsuarioDAOIMP dao;
     private RespuestaREST respuestaDTO;
+    private TokenDAO tokenDAO;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String test(String test) {
         return " Bienvenidos a la Aplicación del REST " + test;
+    }
+
+    @GET
+    @Path("registros")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String recuperarRegistros(@QueryParam("token") String token) {
+        System.out.println(token);
+        respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new UsuarioDAOIMP();
+            return new Gson().toJson(dao.recuperarRegistros());
+        } else {
+            respuestaDTO.setMensaje("Token no valido");
+            return new Gson().toJson(respuestaDTO);
+        }
+    }
+
+    @GET
+    @Path("registro")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String recuperarRegistro(@QueryParam("id") Integer id, @QueryParam("token") String token) {
+        respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new UsuarioDAOIMP();
+            UsuarioDTO dto = dao.recuperarRegistro(id);
+            if (dto != null) {
+                return new Gson().toJson(dto);
+            } else {
+                respuestaDTO.setMensaje("Valor enviado no localizado");
+                return new Gson().toJson(respuestaDTO);
+            }
+        } else {
+            respuestaDTO.setMensaje("Token no valido");
+            return new Gson().toJson(respuestaDTO);
+        }
+
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String insertar(InputStream json, @QueryParam("token") String token) {
+        respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
+        Gson gson = new Gson();
+        dto = gson.fromJson(Util.getJson(json), UsuarioDTO.class);
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new UsuarioDAOIMP();
+            if (dao.agregarRegistro(dto) == true) {
+                respuestaDTO.setMensaje("Operación Exitosa");
+                return new Gson().toJson(respuestaDTO);
+            } else {
+                respuestaDTO.setMensaje("Error durante la Operación");
+                return new Gson().toJson(respuestaDTO);
+            }
+        } else {
+            respuestaDTO.setMensaje("Error durante la Operación");
+            return new Gson().toJson(respuestaDTO);
+        }
     }
 
     @POST
@@ -67,55 +129,14 @@ public class UsuarioRest {
         }
     }
 
-    @GET
-    @Path("registros")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String recuperarRegistros() {
-        dao = new UsuarioDAOIMP();
-        return new Gson().toJson(dao.recuperarRegistros());
-    }
-
-    @GET
-    @Path("registro")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String recuperarRegistro(@QueryParam("id") Integer id) {
-        dao = new UsuarioDAOIMP();
-        UsuarioDTO dto = dao.recuperarRegistro(id);
-        if (dto != null) {
-            return new Gson().toJson(dto);
-        } else {
-            dto = new UsuarioDTO();
-            dto.setNombre("Valor enviado no localizado");
-            return new Gson().toJson(dto);
-        }
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String insertar(InputStream json) {
-
-        System.out.println(Util.getJson(json));
-        respuestaDTO = new RespuestaREST();
-        Gson gson = new Gson();
-        dto = gson.fromJson(Util.getJson(json), UsuarioDTO.class);
-
-        dao = new UsuarioDAOIMP();
-        if (dao.agregarRegistro(dto) == true) {
-            respuestaDTO.setMensaje("Operación Exitosa");
-            return new Gson().toJson(respuestaDTO);
-        } else {
-            respuestaDTO.setMensaje("Error durante la Operación");
-            return new Gson().toJson(respuestaDTO);
-        }
-
-    }
-
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public String modificacion(InputStream json) {
-        respuestaDTO = new RespuestaREST();    
+    public String modificacion(InputStream json, @QueryParam("token") String token) {
+        respuestaDTO = new RespuestaREST();
+        tokenDAO = new TokenDAOIMP();
         Gson gson = new Gson();
-        dto = gson.fromJson(Util.getJson(json), UsuarioDTO.class);    
+        dto = gson.fromJson(Util.getJson(json), UsuarioDTO.class);
+        if (tokenDAO.verificarToken(token) == true) {
             dao = new UsuarioDAOIMP();
             if (dao.modificarRegistro(dto) == true) {
                 respuestaDTO.setMensaje("Operación Exitosa");
@@ -123,41 +144,32 @@ public class UsuarioRest {
             } else {
                 respuestaDTO.setMensaje("Error durante la Operación");
                 return new Gson().toJson(respuestaDTO);
-            }       
+            }
+        } else {
+            respuestaDTO.setMensaje("Error durante la Operación");
+            return new Gson().toJson(respuestaDTO);
+        }
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public String eliminar(@QueryParam("id") Integer id) {
+    public String eliminar(@QueryParam("id") Integer id, @QueryParam("token") String token) {
         respuestaDTO = new RespuestaREST();
-        dao = new UsuarioDAOIMP();
-        Boolean resp = dao.eliminarRegistro(new UsuarioDTO(id));
-        if (resp == false) {
-            respuestaDTO.setMensaje("Error durante la eliminación del registro");
-            return new Gson().toJson(respuestaDTO);
+        tokenDAO = new TokenDAOIMP();
+        if (tokenDAO.verificarToken(token) == true) {
+            dao = new UsuarioDAOIMP();
+            Boolean resp = dao.eliminarRegistro(new UsuarioDTO(id));
+            if (resp == false) {
+                respuestaDTO.setMensaje("Error durante la eliminación del registro");
+                return new Gson().toJson(respuestaDTO);
+            } else {
+                respuestaDTO.setMensaje("Registro eliminado en forma exitosa");
+                return new Gson().toJson(respuestaDTO);
+            }
         } else {
-            respuestaDTO.setMensaje("Registro eliminado en forma exitosa");
+            respuestaDTO.setMensaje("Error durante la Operación");
             return new Gson().toJson(respuestaDTO);
         }
-
-    }
-    
-    
-    @PUT
-    @Path("desactivar")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String desactivar(@QueryParam("id") Integer id) {
-        respuestaDTO = new RespuestaREST();
-        dao = new UsuarioDAOIMP();
-        Boolean resp = dao.inactivarUsuario(new UsuarioDTO(id));
-        if (resp == false) {
-            respuestaDTO.setMensaje("Error durante la desactivacion");
-            return new Gson().toJson(respuestaDTO);
-        } else {
-            respuestaDTO.setMensaje("Registro desactivado en forma exitosa");
-            return new Gson().toJson(respuestaDTO);
-        }
-
     }
 
 }

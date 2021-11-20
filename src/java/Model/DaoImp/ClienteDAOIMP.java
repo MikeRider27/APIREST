@@ -145,7 +145,8 @@ public class ClienteDAOIMP implements ClienteDAO {
                 dto.setApellidos(rs.getString("apellidos"));
                 dto.setTelefono(rs.getString("telefono"));
                 dto.setEmail(rs.getString("email"));
-                dto.setCiudad(new CiudadDTO(rs.getInt("id_ciudad"), rs.getString("ciudad")));
+                dto.setId_ciudad(rs.getInt("id_ciudad"));
+               // dto.setCiudad(new CiudadDTO(rs.getInt("id_ciudad"), rs.getString("ciudad")));
             }
             return dto;
         } catch (SQLException ex) {
@@ -180,7 +181,8 @@ public class ClienteDAOIMP implements ClienteDAO {
                 dto.setApellidos(rs.getString("apellidos"));
                 dto.setTelefono(rs.getString("telefono"));
                 dto.setEmail(rs.getString("email"));
-               dto.setCiudad(new CiudadDTO(rs.getInt("id_ciudad"), rs.getString("ciudad")));
+                //dto.setId_ciudad(rs.getInt("id_ciudad"));
+                dto.setCiudad(new CiudadDTO(rs.getInt("id_ciudad"), rs.getString("ciudad")));
                 lista.add(dto);
             }
             return lista;

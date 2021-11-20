@@ -27,7 +27,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author mike
  */
-@Path("Ciudad")
+@Path("Cliente")
 public class ClienteRest {
 
     private ClienteDTO dto;

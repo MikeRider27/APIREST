@@ -131,7 +131,7 @@ public class ModeloDAOIMP implements ModeloDAO {
             rs = ps.executeQuery();
             if (rs.next()) {
                 dto = new ModeloDTO();
-                dto.setId_marca(rs.getInt("id_modelo"));
+                dto.setId_modelo(rs.getInt("id_modelo"));
                 dto.setDescripcion(rs.getString("descripcion"));
                 dto.setMarca(new MarcaDTO(rs.getInt("id_marca"), rs.getString("marca")));
             }
@@ -162,7 +162,7 @@ public class ModeloDAOIMP implements ModeloDAO {
             lista = new ArrayList<>();
             while (rs.next()) {
                  dto = new ModeloDTO();
-                dto.setId_marca(rs.getInt("id_modelo"));
+              dto.setId_modelo(rs.getInt("id_modelo"));
                 dto.setDescripcion(rs.getString("descripcion"));
                 dto.setMarca(new MarcaDTO(rs.getInt("id_marca"), rs.getString("marca")));
                 lista.add(dto);
